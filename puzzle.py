@@ -81,6 +81,7 @@ class GameGrid(Frame):
         self.update_idletasks()
         
     def key_down(self, event):
+        game_over = False
         key = repr(event.char)
         if key in self.commands:
             self.matrix,done = self.commands[repr(event.char)](self.matrix)
@@ -94,8 +95,9 @@ class GameGrid(Frame):
                 if game_state(self.matrix)=='lose':
                     self.grid_cells[1][1].configure(text="You",bg=BACKGROUND_COLOR_CELL_EMPTY)
                     self.grid_cells[1][2].configure(text="Lose!",bg=BACKGROUND_COLOR_CELL_EMPTY)
+                    game_over = True
                     
-        _ = self.bot.move(self.matrix)
+        _ = self.bot.move(self.matrix,game_over)
 
     def generate_next(self):
         index = (self.gen(), self.gen())
