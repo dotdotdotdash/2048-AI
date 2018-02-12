@@ -2,6 +2,8 @@ from tkinter import *
 from logic import *
 from random import *
 from agent import *
+from pyautogui import press
+import time
 
 SIZE = 500
 GRID_LEN = 4
@@ -30,7 +32,6 @@ KEY_RIGHT = "'d'"
 class GameGrid(Frame):
     def __init__(self):
         Frame.__init__(self)
-
         self.grid()
         self.master.title('2048')
         self.master.bind("<Key>", self.key_down)
@@ -44,6 +45,8 @@ class GameGrid(Frame):
         self.init_grid()
         self.init_matrix()
         self.update_grid_cells()
+        time.sleep(3)
+        press('a')
         self.mainloop()
 
     def init_grid(self):
@@ -97,12 +100,13 @@ class GameGrid(Frame):
                     self.grid_cells[1][2].configure(text="Lose!",bg=BACKGROUND_COLOR_CELL_EMPTY)
                     game_over = True
                     
-        _ = self.bot.move(self.matrix,game_over)
+        flag = self.bot.move(self.matrix,game_over)
 
-    def generate_next(self):
+    def generate_next(self):        
         index = (self.gen(), self.gen())
         while self.matrix[index[0]][index[1]] != 0:
             index = (self.gen(), self.gen())
         self.matrix[index[0]][index[1]] = 2
 
-gamegrid = GameGrid()
+if __name__ == "__main__": 
+    gamegrid = GameGrid()
