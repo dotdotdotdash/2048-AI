@@ -60,20 +60,20 @@ class agent:
         else:
             next_matrix,_ = up(self.observation)
             
-        state_hat = sum(cell.count(0) for cell in next_matrix)
+        state_hat_1 = sum(cell.count(0) for cell in next_matrix)
         
-        for row in next_matrix:
-            for element in row:
-                blocks.append(element)
-        
-        blocks.sort(reverse=True)
-        state_hat_2 = max(blocks)
-        while 2**n == state_hat_2:
-            state_hat_2 = 10**n
-            if n != 1:
-                val = sum(cell.count(2**(n-1)) for cell in next_matrix)
+#        for row in next_matrix:
+#            for element in row:
+#                blocks.append(element)
+#        
+#        blocks.sort(reverse=True)
+#        state_hat_2 = max(blocks)
+#        while 2**n == state_hat_2:
+#            state_hat_2 = 10**n
+#            if n != 1:
+#                val = sum(cell.count(2**(n-1)) for cell in next_matrix)
                 
-        return state_hat_1, state_hat_2, next_matrix
+        return state_hat_1, next_matrix
     
     def build_brain(self):
         self.model = Sequential()
