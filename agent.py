@@ -33,23 +33,34 @@ class agent:
                 
     def choose_action(self):
         global prev_mat
-        best_score = 0
+        best_score_1 = 0
+        best_score_2 = 0
         mat = []
+        pred = 1
         
         for index in self.move_key:
-            score, mat = self.minimax(index)
-        
+            score_1, score_2, mat = self.minimax(index)
+            
             if mat != prev_mat:
-                if score > best_score:
-                    self.reward = [score, mat, index]
-                    best_score = score
+                if score_1 > 8:
+                    if score_2 > best_score_2:
+                        self.reward = [score_1, score_2, mat, index]
+                        best_score_2 = score_2
+                        pred = 2
+                else:
+                    if score_1 > best_score_1:
+                        self.reward = [score_1, score_2, mat, index]
+                        best_score_1 = score_1
+                        pred = 1
                         
-        prev_mat = self.reward[1]
-        return self.reward[2]
+        print("score-1: {} | score-2: {} | score-{} prediction".format(score_1,score_2,pred))
+        prev_mat = self.reward[2]
+        return self.reward[3]
     
     def minimax(self,move):
         state_hat_2 = 0
         blocks = []
+        val = 0
         
         if move =='a':
             next_matrix,_ = left(self.observation)
@@ -62,18 +73,18 @@ class agent:
             
         state_hat_1 = sum(cell.count(0) for cell in next_matrix)
         
-#        for row in next_matrix:
-#            for element in row:
-#                blocks.append(element)
-#        
-#        blocks.sort(reverse=True)
-#        state_hat_2 = max(blocks)
-#        while 2**n == state_hat_2:
-#            state_hat_2 = 10**n
-#            if n != 1:
-#                val = sum(cell.count(2**(n-1)) for cell in next_matrix)
-                
-        return state_hat_1, next_matrix
+        for row in next_matrix:
+            for element in row:
+                blocks.append(element)
+        
+        blocks.sort(reverse=True)
+        max_power = np.log2(max(blocks))
+        
+        for power in range(int(max_power)+1):
+            val = sum(cell.count(2**power) for cell in next_matrix)*(10**power)
+            state_hat_2 += val
+        
+        return state_hat_1, state_hat_2, next_matrix
     
     def build_brain(self):
         self.model = Sequential()
@@ -85,7 +96,6 @@ class agent:
     def move(self,matrix,game_over):
         if game_over:
 #            self.model.fit(np.asarray(self.input_data),np.asarray(self.output_data),epochs=5)
-            print("Game Over ! Reinitializing")
             flag = True
         else:
             self.observation = matrix
