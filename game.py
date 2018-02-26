@@ -2,7 +2,7 @@
 """
 Created on Sun Feb 18 13:19:12 2018
 
-@author: venka
+@author: venkatavaradhan lakshminarayanan
 """
 import numpy as np
 import random
