@@ -10,9 +10,10 @@ import random
 class Board():
     def __init__(self):
         self.board = np.zeros((4,4), dtype = np.int)
-        self.rotated_board = np.zeros((4,4), dtype = np.int)
-        self.gameover = False
-        self.newgame = True
+        self.prev_board = np.zeros((4,4), dtype = np.int)
+        self.new_game()
+        print("New Board Created")
+        self.newgame = False
         
     def new_game(self):
         for cnt in range(2):
@@ -55,18 +56,18 @@ class Board():
             self.board[k] = new_col
             k += 1
             
-    def rotate(self,direction):
-        self.rotated_board = np.rot90(self.board, direction)
+    def next_move(self,direction):
+        self.board = np.rot90(self.board, direction)
         self.move()
-        self.board = np.rot90(self.rotated_board,-direction)
+        self.board = np.rot90(self.board, -direction)
         
-    def play(self):
-        while not self.gameover:
-            if self.newgame:
-                self.new_game()
-                self.newgame = False
-            else:
-                
-                
+    def play_game(self,direction):
+        self.next_move(direction)
+        self.prev_board = self.board
+        self.populate()
+        
 game = Board()
-game.play()
+while True:
+    print(game.board)
+    key = int(input("Your move: "))
+    game.play_game(key)
