@@ -1,6 +1,9 @@
-from tkinter import *
+#!/usr/bin/env python
+from Tkinter import *
 from logic import *
 from random import *
+import rospy
+from std_msgs.msg import String
 
 SIZE = 500
 GRID_LEN = 4
@@ -42,7 +45,7 @@ class GameGrid(Frame):
         self.init_grid()
         self.init_matrix()
         self.update_grid_cells()
-        
+
         self.mainloop()
 
     def init_grid(self):
@@ -78,7 +81,7 @@ class GameGrid(Frame):
                 else:
                     self.grid_cells[i][j].configure(text=str(new_number), bg=BACKGROUND_COLOR_DICT[new_number], fg=CELL_COLOR_DICT[new_number])
         self.update_idletasks()
-        
+
     def key_down(self, event):
         key = repr(event.char)
         if key in self.commands:
@@ -101,4 +104,13 @@ class GameGrid(Frame):
             index = (self.gen(), self.gen())
         self.matrix[index[0]][index[1]] = 2
 
-gamegrid = GameGrid()
+def callback(msg):
+
+def listener():
+    rospy.init_node('listener', anonymous=True)
+    rospy.Subscriber("chatter", String, callback)
+    gamegrid = GameGrid()
+    rospy.spin()
+
+if __name__ == '__main__':
+    listener()
