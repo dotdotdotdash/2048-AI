@@ -1,0 +1,4 @@
+<launch>
+  <node name="game" pkg="ai_2048" type="game.py" output="screen"/>
+  <node name="agent" pkg="ai_2048" type="agent.py"/>
+</launch>
